@@ -5,7 +5,7 @@ javascript:(function() {
     overlay.style.top = '50%';
     overlay.style.left = '50%';
     overlay.style.transform = 'translate(-50%, -50%)';
-    overlay.style.width = '300px';
+    overlay.style.width = '350px';
     overlay.style.padding = '20px';
     overlay.style.background = 'linear-gradient(to bottom, #87CEEB, #4682B4)'; // Light to dark blue gradient
     overlay.style.borderRadius = '10px';
@@ -63,32 +63,77 @@ javascript:(function() {
         return button;
     }
 
-    // Add buttons with the same gradient style
-    var button1 = createGradientButton('Button 1', '#1E90FF', '#00BFFF', function() {
-        // Change the value in the div with class 'monitor_large-value_P-rAm'
-        var targetDiv = document.querySelector('.monitor_large-value_P-rAm');
-        if (targetDiv) {
-            targetDiv.innerText = '1000'; // Set to a high number
-        }
-    });
+    // Function to update specific elements to a value of 1000
+    function updateDivValuesTo1000() {
+        var valuesToUpdate = document.querySelectorAll('.monitor_value_3Yexa, .monitor_large-value_P-rAm');
+        valuesToUpdate.forEach(function(div) {
+            div.innerText = '1000';
+        });
+    }
+
+    // Function to add 1000 to the value in the divs
+    function add1000() {
+        var valuesToUpdate = document.querySelectorAll('.monitor_value_3Yexa, .monitor_large-value_P-rAm');
+        valuesToUpdate.forEach(function(div) {
+            var currentValue = parseInt(div.innerText, 10) || 0;
+            div.innerText = (currentValue + 1000).toString();
+        });
+    }
+
+    // Function to loop through and update values every second
+    function loopUpdateValues() {
+        setInterval(function() {
+            updateDivValuesTo1000();
+            add1000();
+        }, 1000); // Update every 1000 milliseconds (1 second)
+    }
+
+    // Function to filter elements based on the search query
+    function filterDivs() {
+        var query = document.getElementById('searchInput').value.toLowerCase();
+        var valuesToUpdate = document.querySelectorAll('.monitor_value_3Yexa, .monitor_large-value_P-rAm');
+        valuesToUpdate.forEach(function(div) {
+            var text = div.innerText.toLowerCase();
+            if (text.includes(query)) {
+                div.style.backgroundColor = '#B0E0E6'; // Highlight matching divs
+            } else {
+                div.style.backgroundColor = ''; // Reset background
+            }
+        });
+    }
+
+    // Create the search bar
+    var searchBarContainer = document.createElement('div');
+    searchBarContainer.style.marginBottom = '20px';
+    
+    var searchLabel = document.createElement('label');
+    searchLabel.innerText = 'Search:';
+    searchLabel.style.color = '#FFFFFF';
+    searchLabel.style.display = 'block';
+    searchBarContainer.appendChild(searchLabel);
+
+    var searchInput = document.createElement('input');
+    searchInput.id = 'searchInput';
+    searchInput.type = 'text';
+    searchInput.style.width = '100%';
+    searchInput.style.padding = '10px';
+    searchInput.style.borderRadius = '5px';
+    searchInput.style.border = '1px solid #ddd';
+    searchInput.addEventListener('input', filterDivs);
+    searchBarContainer.appendChild(searchInput);
+    
+    overlay.appendChild(searchBarContainer);
+
+    // Add Button 1 with the functionality to set values to 1000
+    var button1 = createGradientButton('Set to 1000', '#1E90FF', '#00BFFF', updateDivValuesTo1000);
     overlay.appendChild(button1);
 
-    var button2 = createGradientButton('Button 2', '#1E90FF', '#00BFFF', function() {
-        // Same functionality as Button 1
-        var targetDiv = document.querySelector('.monitor_large-value_P-rAm');
-        if (targetDiv) {
-            targetDiv.innerText = '1000'; // Set to a high number
-        }
-    });
+    // Add Button 2 with functionality to add 1000
+    var button2 = createGradientButton('Increase by 1000', '#1E90FF', '#00BFFF', add1000);
     overlay.appendChild(button2);
 
-    var button3 = createGradientButton('Button 3', '#00BFFF', '#1E90FF', function() {
-        // Change the value in the div with class 'monitor_large-value_P-rAm'
-        var targetDiv = document.querySelector('.monitor_large-value_P-rAm');
-        if (targetDiv) {
-            targetDiv.innerText = '1000'; // Set to a high number
-        }
-    });
+    // Add Button 3 with functionality to add 1000
+    var button3 = createGradientButton('Boost Value', '#00BFFF', '#1E90FF', add1000);
     overlay.appendChild(button3);
 
     // Add close button
@@ -107,4 +152,7 @@ javascript:(function() {
 
     // Append the overlay to the body
     document.body.appendChild(overlay);
+
+    // Start the looping function
+    loopUpdateValues();
 })();
