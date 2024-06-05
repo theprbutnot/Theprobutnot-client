@@ -1,0 +1,110 @@
+javascript:(function() {
+    // Create the modal overlay
+    var overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '50%';
+    overlay.style.left = '50%';
+    overlay.style.transform = 'translate(-50%, -50%)';
+    overlay.style.width = '300px';
+    overlay.style.padding = '20px';
+    overlay.style.background = 'linear-gradient(to bottom, #87CEEB, #4682B4)'; // Light to dark blue gradient
+    overlay.style.borderRadius = '10px';
+    overlay.style.boxShadow = '0 0 10px rgba(0,0,0,0.2)';
+    overlay.style.zIndex = '9999';
+    overlay.style.fontFamily = 'Arial, sans-serif';
+    overlay.style.color = '#FFFFFF';
+    overlay.style.cursor = 'move';
+
+    // Make the overlay draggable
+    var isDragging = false;
+    var offsetX, offsetY;
+
+    overlay.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        offsetX = e.clientX - overlay.getBoundingClientRect().left;
+        offsetY = e.clientY - overlay.getBoundingClientRect().top;
+        overlay.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (isDragging) {
+            var x = e.clientX - offsetX;
+            var y = e.clientY - offsetY;
+            overlay.style.left = `${x}px`;
+            overlay.style.top = `${y}px`;
+        }
+    });
+
+    document.addEventListener('mouseup', function() {
+        isDragging = false;
+        overlay.style.cursor = 'move';
+    });
+
+    // Add title
+    var title = document.createElement('h2');
+    title.innerText = 'Theprobutnot Client';
+    title.style.marginBottom = '20px';
+    title.style.color = '#FFFFFF';
+    overlay.appendChild(title);
+
+    // Function to create gradient button
+    function createGradientButton(text, colorStart, colorEnd, onClick) {
+        var button = document.createElement('button');
+        button.innerText = text;
+        button.style.width = '100%';
+        button.style.padding = '10px';
+        button.style.marginBottom = '10px';
+        button.style.background = `linear-gradient(to right, ${colorStart}, ${colorEnd})`;
+        button.style.color = 'white';
+        button.style.border = 'none';
+        button.style.borderRadius = '5px';
+        button.style.cursor = 'pointer';
+        button.onclick = onClick;
+        return button;
+    }
+
+    // Add buttons with the same gradient style
+    var button1 = createGradientButton('Button 1', '#1E90FF', '#00BFFF', function() {
+        // Change the value in the div with class 'monitor_large-value_P-rAm'
+        var targetDiv = document.querySelector('.monitor_large-value_P-rAm');
+        if (targetDiv) {
+            targetDiv.innerText = '1000'; // Set to a high number
+        }
+    });
+    overlay.appendChild(button1);
+
+    var button2 = createGradientButton('Button 2', '#1E90FF', '#00BFFF', function() {
+        // Same functionality as Button 1
+        var targetDiv = document.querySelector('.monitor_large-value_P-rAm');
+        if (targetDiv) {
+            targetDiv.innerText = '1000'; // Set to a high number
+        }
+    });
+    overlay.appendChild(button2);
+
+    var button3 = createGradientButton('Button 3', '#00BFFF', '#1E90FF', function() {
+        // Change the value in the div with class 'monitor_large-value_P-rAm'
+        var targetDiv = document.querySelector('.monitor_large-value_P-rAm');
+        if (targetDiv) {
+            targetDiv.innerText = '1000'; // Set to a high number
+        }
+    });
+    overlay.appendChild(button3);
+
+    // Add close button
+    var closeButton = document.createElement('button');
+    closeButton.innerText = 'Close';
+    closeButton.style.width = '100%';
+    closeButton.style.padding = '10px';
+    closeButton.style.marginTop = '10px';
+    closeButton.style.backgroundColor = '#1C1C1C';
+    closeButton.style.color = 'white';
+    closeButton.style.border = 'none';
+    closeButton.style.borderRadius = '5px';
+    closeButton.style.cursor = 'pointer';
+    closeButton.onclick = function() { document.body.removeChild(overlay); };
+    overlay.appendChild(closeButton);
+
+    // Append the overlay to the body
+    document.body.appendChild(overlay);
+})();
